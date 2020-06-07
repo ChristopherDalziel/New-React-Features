@@ -92,6 +92,7 @@ const App = (props) => {
 };
 
 const NoteApp = () => {
+  // notesData allows us to save all our data to localStorage
   const notesData = JSON.parse(localStorage.getItem("notes"));
   const [notes, setNotes] = useState(notesData || []);
   const [title, setTitle] = useState("");
@@ -115,6 +116,7 @@ const NoteApp = () => {
     setNotes(notes.filter((note) => note.title !== title));
   };
 
+  // Use effect loads every time our application loads and every time the props/app state is updated, so on submission of a new note it set's the item to localState but it also calls the data from localState on pageload?
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   });
