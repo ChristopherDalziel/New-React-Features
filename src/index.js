@@ -4,9 +4,50 @@ import * as serviceWorker from "./serviceWorker";
 
 // Hooks are nothing more than functions
 
+// This is an example of a pattern we're used to, however when using hooks this does not work. This doesn't work because it combines the state into a singular function and it doesn't merge the changes, it completely replaces the old state with the new state. Causing issues when we make changes to multiple parts of our application, for example when we increment and then change the string value using our input, our count input is completely removed and vice-versa.
+// To avoid this we need to need to break up our state objects into individual values, this is shown in the example below.
+// 1. State doesn't need to be an object with use state
+// 2. You can call useState as many times as you need in a given component
+// 3. When you're using and you update the state, it completely replaces what was there before unlike in previous versions of React where it was merged.
+// const App = (props) => {
+//   const [state, setState] = useState({
+//     count: props.count,
+//     string: "",
+//   });
+
+//   const increment = () => {
+//     setState({ count: state.count + 1 });
+//   };
+
+//   const decrement = () => {
+//     setState({ count: state.count - 1 });
+//   };
+
+//   const reset = () => {
+//     setState({ count: props.count });
+//   };
+
+//   const updateString = (e) => {
+//     setState({ string: e.target.value });
+//   };
+
+//   return (
+//     <div>
+//       <p>
+//         The current {state.string || "count"} is ${state.count}
+//       </p>
+//       <button onClick={increment}>+ 1</button>
+//       <button onClick={decrement}>- 1</button>
+//       <button onClick={reset}>reset</button>
+//       <input value={state.string} onChange={updateString} />
+//     </div>
+//   );
+// };
+
 const App = (props) => {
   // count stores the count value, and setCount because it's setting the count. However these names can be anything.
   const [count, setCount] = useState(props.count);
+  const [string, setString] = useState("");
 
   const increment = () => {
     setCount(count + 1);
@@ -20,12 +61,19 @@ const App = (props) => {
     setCount(props.count);
   };
 
+  const updateString = (e) => {
+    setString(e.target.value);
+  };
+
   return (
     <div>
-      <p>The current count is ${count}</p>
+      <p>
+        The current {string || "count"} is ${count}
+      </p>
       <button onClick={increment}>+ 1</button>
       <button onClick={decrement}>- 1</button>
       <button onClick={reset}>reset</button>
+      <input value={string} onChange={updateString} />
     </div>
   );
 };
