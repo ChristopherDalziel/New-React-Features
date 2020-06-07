@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 
 const App = (props) => {
   // count stores the count value, and setCount because it's setting the count. However these names can be anything.
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(props.count);
 
   const increment = () => {
     setCount(count + 1);
