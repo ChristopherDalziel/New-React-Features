@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 
-// Hooks are nothing more than functions
+// ❌ BAD ❌
 
 // This is an example of a pattern we're used to, however when using hooks this does not work. This doesn't work because it combines the state into a singular function and it doesn't merge the changes, it completely replaces the old state with the new state. Causing issues when we make changes to multiple parts of our application, for example when we increment and then change the string value using our input, our count input is completely removed and vice-versa.
 // To avoid this we need to need to break up our state objects into individual values, this is shown in the example below.
@@ -44,6 +44,8 @@ import * as serviceWorker from "./serviceWorker";
 //   );
 // };
 
+// ✅ GOOD ✅
+
 const App = (props) => {
   // count stores the count value, and setCount because it's setting the count. However these names can be anything.
   const [count, setCount] = useState(props.count);
@@ -78,6 +80,60 @@ const App = (props) => {
   );
 };
 
+const NoteApp = () => {
+  const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+
+  const addNote = (e) => {
+    e.preventDefault();
+    setNotes([
+      ...notes,
+      {
+        title,
+        body,
+      },
+    ]);
+    setTitle("");
+    setBody("");
+  };
+
+  const removeNote = (title) => {
+    // Return an array that matches the filter, then return true when notes title does not match the title passed in and return false when they do match
+    setNotes(notes.filter((note) => note.title !== title));
+  };
+
+  return (
+    <>
+      <h1>Notes:</h1>
+      <p>Add note:</p>
+      {notes.map((note) => (
+        <div key={note.title}>
+          <h2>{note.title}</h2>
+          <p>{note.body}</p>
+          <button onClick={() => removeNote(note.title)}>x</button>
+        </div>
+      ))}
+      <form onSubmit={addNote}>
+        <input
+          autoFocus
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+        <textarea
+          value={body}
+          onChange={(e) => {
+            setBody(e.target.value);
+          }}
+        />
+        <button>Add note</button>
+      </form>
+    </>
+  );
+};
+
 // Setting the default of count to 0 if an amount is not added to the 'App' props.
 App.defaultProps = {
   count: 0,
@@ -85,7 +141,7 @@ App.defaultProps = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <NoteApp />
   </React.StrictMode>,
   document.getElementById("root")
 );
