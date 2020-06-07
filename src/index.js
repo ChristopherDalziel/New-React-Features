@@ -54,13 +54,21 @@ const App = (props) => {
   const [count, setCount] = useState(props.count);
   const [string, setString] = useState("");
 
+  // This useEffect does not do anything when we update the title, however it runs away - for that reason we're going to restrict it's usage to only update when we update the count changes
   // useEffect runs once when the application renders, and then each time the there are changes made to the component state or props.
   // This means it's working as componentDidMount and componentDidUpdate but within a functional component instead of a class component.
   useEffect(() => {
     console.log("useEffect ran");
     // Sets the title of the document to 0 and updates each time we change the props by calling increment/decrement or reset
     document.title = count;
-  });
+    // Adding count here below within an Array means this useEffect will only run when the count is updated
+  }, [count]);
+
+  // useEffect can be used as many times as we would like within the functional component, this means we can create one for each specific feature unlike previously when we would have just had to use 1 componentDidMount etc. useEffect(s) will run in the order they're listed within the component.
+  useEffect(() => {
+    console.log("this should only run once");
+    // By adding an empty array it means this useEffect only runs once, because it depends on nothing.
+  }, []);
 
   const increment = () => {
     setCount(count + 1);
@@ -92,9 +100,7 @@ const App = (props) => {
 };
 
 const NoteApp = () => {
-  // notesData allows us to save all our data to localStorage
-  const notesData = JSON.parse(localStorage.getItem("notes"));
-  const [notes, setNotes] = useState(notesData || []);
+  const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -116,10 +122,18 @@ const NoteApp = () => {
     setNotes(notes.filter((note) => note.title !== title));
   };
 
-  // Use effect loads every time our application loads and every time the props/app state is updated, so on submission of a new note it set's the item to localState but it also calls the data from localState on pageload?
+  // Fetch existing note data on application load
+  useEffect(() => {
+    const notesData = JSON.parse(localStorage.getItem("notes"));
+    if (notesData) {
+      setNotes(notesData);
+    }
+  }, []);
+
+  // Set note data whenever notes are updated
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
-  });
+  }, [notes]);
 
   return (
     <>
