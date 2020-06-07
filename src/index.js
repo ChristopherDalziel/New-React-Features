@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
+
+// useState allows us to do something we couldn't do before, inside functional components we can now manage component state
+// useEffect is similar, this is sort of a lifecycle method replacement, so we can do it inside a functional component
 
 // ❌ BAD ❌
 
@@ -51,6 +54,14 @@ const App = (props) => {
   const [count, setCount] = useState(props.count);
   const [string, setString] = useState("");
 
+  // useEffect runs once when the application renders, and then each time the there are changes made to the component state or props.
+  // This means it's working as componentDidMount and componentDidUpdate but within a functional component instead of a class component.
+  useEffect(() => {
+    console.log("useEffect ran");
+    // Sets the title of the document to 0 and updates each time we change the props by calling increment/decrement or reset
+    document.title = count;
+  });
+
   const increment = () => {
     setCount(count + 1);
   };
@@ -81,7 +92,8 @@ const App = (props) => {
 };
 
 const NoteApp = () => {
-  const [notes, setNotes] = useState([]);
+  const notesData = JSON.parse(localStorage.getItem("notes"));
+  const [notes, setNotes] = useState(notesData || []);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -102,6 +114,10 @@ const NoteApp = () => {
     // Return an array that matches the filter, then return true when notes title does not match the title passed in and return false when they do match
     setNotes(notes.filter((note) => note.title !== title));
   };
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  });
 
   return (
     <>
