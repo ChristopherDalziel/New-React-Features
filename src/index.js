@@ -140,11 +140,7 @@ const NoteApp = () => {
       <h1>Notes:</h1>
       <p>Add note:</p>
       {notes.map((note) => (
-        <div key={note.title}>
-          <h2>{note.title}</h2>
-          <p>{note.body}</p>
-          <button onClick={() => removeNote(note.title)}>x</button>
-        </div>
+        <Note key={note.title} note={note} removeNote={removeNote} />
       ))}
       <form onSubmit={addNote}>
         <input
@@ -163,6 +159,24 @@ const NoteApp = () => {
         <button>Add note</button>
       </form>
     </>
+  );
+};
+
+const Note = ({ note, removeNote }) => {
+  useEffect(() => {
+    console.log("setting up effect");
+
+    return () => {
+      console.log("cleaning up effect");
+    };
+  });
+
+  return (
+    <div>
+      <h2>{note.title}</h2>
+      <p>{note.body}</p>
+      <button onClick={() => removeNote(note.title)}>x</button>
+    </div>
   );
 };
 
