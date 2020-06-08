@@ -14,7 +14,7 @@ export const Note = ({ note }) => {
       </p>
 
       <button
-        onClick={() => dispatch({ type: "REMOVE_NOTE", note: note.title })}
+        onClick={() => dispatch({ type: "REMOVE_NOTE", title: note.title })}
       >
         x
       </button>
