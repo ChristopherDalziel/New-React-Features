@@ -3,18 +3,13 @@ import React, { useEffect, useReducer } from "react";
 import { notesReducer } from "../reducers/notes";
 import NoteList from "./NoteList";
 import AddNoteForm from "././AddNoteForm";
+import NotesContext from "../context/notesContext";
 
 const NoteApp = () => {
   // const [notes, setNotes] = useState([]);
   // useReducer is taking in ourReducer and then our default state.
   // notes is the state
   const [notes, dispatch] = useReducer(notesReducer, []);
-
-  const removeNote = (title) => {
-    // Return an array that matches the filter, then return true when notes title does not match the title passed in and return false when they do match
-    // setNotes(notes.filter((note) => note.title !== title));
-    dispatch({ type: "REMOVE_NOTE", title });
-  };
 
   // Fetch existing note data on application load
   useEffect(() => {
@@ -30,12 +25,13 @@ const NoteApp = () => {
   }, [notes]);
 
   return (
-    <>
+    // Everything thats provided in the value is shared via the context, in this example we're sharing the notes array as well as our dispatch function
+    <NotesContext.Provider value={{ notes, dispatch }}>
       <h1>Notes:</h1>
       <p>Add note:</p>
-      <NoteList notes={notes} removeNote={removeNote} />
-      <AddNoteForm dispatch={dispatch} />
-    </>
+      <NoteList />
+      <AddNoteForm />
+    </NotesContext.Provider>
   );
 };
 export default NoteApp;
