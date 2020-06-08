@@ -6,13 +6,6 @@ const NoteForm = ({ dispatch }) => {
 
   const addNote = (e) => {
     e.preventDefault();
-    // setNotes([
-    //   ...notes,
-    //   {
-    //     title,
-    //     body,
-    //   },
-    // ]);
     dispatch({ type: "ADD_NOTE", title, body });
     setTitle("");
     setBody("");
